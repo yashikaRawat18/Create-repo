@@ -1,103 +1,76 @@
-import Image from "next/image";
+import {
+  MoreHorizontal,
+  Link,
+  MessageCircle,
+  Bookmark,
+  Share,
+} from 'lucide-react';
 
-export default function Home() {
+import Header from '@/../components/Header';
+import StoryReel from '@/../components/StoryReel';
+import Post from '@/../components/Post';
+import Suggestions from '@/../components/Suggestions';
+
+// Mock Data for the feed
+const mockPosts = [
+  {
+    id: 1,
+    username: 'nature_lover',
+    avatar: 'https://placehold.co/512x512/4CAF50/FFFFFF?text=N',
+    description:
+      "Spent the weekend hiking up to this incredible spot. The air was so fresh and the silence was magical. It's moments like these that remind you of the beauty of the world. Highly recommend this trail for anyone looking for a peaceful escape.",
+    timestamp: '2 hours ago',
+    postUrl: '#',
+    likes: 234,
+    comments: 12,
+    isLiked: false,
+    isBookmarked: false,
+  },
+  {
+    id: 2,
+    username: 'city_explorer',
+    avatar: 'https://placehold.co/512x512/00BCD4/FFFFFF?text=C',
+    description:
+      'There is a unique energy to the city after dark. The way the lights reflect off the streets after a little rain is just mesmerizing. This was taken from the rooftop of our building, overlooking the downtown area. #cityscape #urban #nightlife',
+    timestamp: '5 hours ago',
+    postUrl: '#',
+    likes: 156,
+    comments: 8,
+    isLiked: true,
+    isBookmarked: false,
+  },
+  {
+    id: 3,
+    username: 'art_creator',
+    avatar: 'https://placehold.co/512x512/E91E63/FFFFFF?text=A',
+    description:
+      'Just finished this new digital painting, spent about 20 hours on it. I tried a new technique with the brushes to get this texture. Let me know what you think!',
+    timestamp: '8 hours ago',
+    postUrl: '#',
+    likes: 89,
+    comments: 15,
+    isLiked: false,
+    isBookmarked: true,
+  },
+];
+
+export default function Page() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="bg-gray-50 dark:bg-black min-h-screen">
+      {/* Header, StoryReel, and Suggestions are client components that handle interactivity */}
+      <Header />
+      <main className="container mx-auto pt-20 px-4">
+        <div className="flex justify-center">
+          {/* Feed is a client component that wraps Post components */}
+          <div className="w-full max-w-lg mx-auto">
+            <StoryReel />
+            {mockPosts.map((post) => (
+              <Post key={post.id} post={post} />
+            ))}
+          </div>
+          <Suggestions />
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }
