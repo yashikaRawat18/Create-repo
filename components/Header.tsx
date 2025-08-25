@@ -71,7 +71,7 @@ const Header = () => {
             <img
               src="https://placehold.co/32x32/FFFFFF/000000?text=U"
               alt="User Avatar"
-              className="w-full h-full rounded-full border-2 border-white dark:border-gray-900"
+              className="w-full h-full rounded-full border-2 border-amber-50 dark:border-gray-900"
             />
           </div>
         </nav>
