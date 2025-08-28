@@ -6,6 +6,7 @@ import {
   Share,
 } from 'lucide-react';
 
+
 import Header from '@/../components/Header';
 import StoryReel from '@/../components/StoryReel';
 import Post from '@/../components/Post';
@@ -68,9 +69,11 @@ export default function Page() {
               <Post key={post.id} post={post} />
             ))}
           </div>
+          
           <Suggestions />
         </div>
       </main>
     </div>
   );
+  
 }

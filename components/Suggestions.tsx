@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-
+import Link from 'next/link'; 
 const mockSuggestions = [
   {
     id: 1,
@@ -54,9 +54,9 @@ const Suggestions = () => {
           </div>
           <div className="ml-4">
             <p className="font-semibold text-sm text-gray-800 dark:text-white">
-              current_user
+             <a href="/profilepage">Current_user</a>
             </p>
-            <p className="text-gray-500 text-sm">Your Name</p>
+          <p className="text-gray-500 text-sm">Your Name</p>
           </div>
           <button className="ml-auto text-blue-500 font-semibold text-xs hover:text-blue-600 transition-colors">
             Switch
