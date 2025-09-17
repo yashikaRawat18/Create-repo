@@ -1,62 +1,41 @@
 'use client';
 
-import React from 'react';
-import { Heart, MessageCircle } from 'lucide-react';
-import { Post, UserProfile } from '../src/app/types';
+import { ProfilePost as ProfilePostType } from "@/app/types";
+
 
 interface ProfilePostProps {
-  post: Post;
-  onPostClick: (post: Post) => void;
-  user: UserProfile;
+  post: ProfilePostType;
+  onPostClick?: (post: ProfilePostType) => void; // optional click handler
 }
 
-export const ProfilePost: React.FC<ProfilePostProps> = ({ post, onPostClick, user }) => {
-  // Mock data for the collage
-  const collageImages = [
-    'https://placehold.co/100x100/A855F7/FFFFFF?text=1',
-    'https://placehold.co/100x100/3B82F6/FFFFFF?text=2',
-    'https://placehold.co/100x100/EC4899/FFFFFF?text=3',
-    'https://placehold.co/100x100/10B981/FFFFFF?text=4',
-  ];
-
+export default function ProfilePost({ post, onPostClick }: ProfilePostProps) {
   return (
     <div
-      className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 mb-6 transition-colors duration-200 cursor-pointer"
-      onClick={() => onPostClick(post)}
+      className="cursor-pointer border rounded-lg bg-white dark:bg-gray-900 shadow p-2 mb-2"
+      onClick={() => onPostClick?.(post)}
     >
-      <div className="flex items-center space-x-4 mb-4">
-        <img
-          src={user.avatar}
-          alt={`${user.username}'s avatar`}
-          className="w-12 h-12 rounded-full border-2 border-white dark:border-gray-900"
-        />
-        <div className="flex flex-col">
-          <p className="font-semibold text-lg dark:text-gray-100">{user.username}</p>
-          <div className="grid grid-cols-2 gap-1 mt-1 w-20">
-            {collageImages.slice(0, 4).map((url, index) => (
-              <img
-                key={index}
-                src={url}
-                alt={`Collage image ${index + 1}`}
-                className="w-full h-auto object-cover rounded-sm"
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-      
-      <p className="text-gray-800 dark:text-gray-200 font-normal">{post.description}</p>
-      
-      <div className="flex items-center space-x-4 text-gray-600 dark:text-gray-400 mt-4">
-        <div className="flex items-center space-x-1">
-          <Heart size={20} />
-          <span className="text-sm font-semibold">{post.likes.toLocaleString()}</span>
-        </div>
-        <div className="flex items-center space-x-1">
-          <MessageCircle size={20} />
-          <span className="text-sm font-semibold">{post.comments}</span>
+      <img
+        src={post.imageUrl}
+        alt={post.description}
+        className="w-full h-40 object-cover rounded"
+      />
+      <div className="mt-2 px-1">
+        <div className="font-semibold text-sm text-gray-800 dark:text-gray-100 mb-1 truncate">{post.description}</div>
+        <div className="flex items-center gap-4 mt-1">
+          <button className="flex items-center gap-1 text-gray-500 hover:text-red-500">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 21.682l-7.682-7.682a4.5 4.5 0 010-6.364z" /></svg>
+            <span className="text-xs">{post.likes}</span>
+          </button>
+          <button className="flex items-center gap-1 text-gray-500 hover:text-blue-500">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M17 8h2a2 2 0 012 2v8a2 2 0 01-2 2H7a2 2 0 01-2-2V10a2 2 0 012-2h2" /><path d="M15 3h-6a2 2 0 00-2 2v2a2 2 0 002 2h6a2 2 0 002-2V5a2 2 0 00-2-2z" /></svg>
+            <span className="text-xs">{post.comments}</span>
+          </button>
+          <button className="flex items-center gap-1 text-gray-500 hover:text-green-500">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5" /></svg>
+            <span className="text-xs">Share</span>
+          </button>
         </div>
       </div>
     </div>
   );
-};
+}

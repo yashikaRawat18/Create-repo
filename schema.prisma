@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  username  String   @unique
+  phone     String
+  password  String
+  bio       String?   // optional user bio
+  website   String?   // optional website
+  avatar    String?   // optional profile photo
+  createdAt DateTime @default(now())
+
+  // Relations
+  followedBy Follows[] @relation("FollowedBy")
+  following  Follows[] @relation("Following")
+
+  posts      Post[]
+  stories    Story[]
+}
+
+model Post {
+  id          String   @id @default(cuid())
+  imageUrl    String
+  description String
+  likes       Int      @default(0)
+  comments    Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  // Relation to User
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+}
+
+model Story {
+  id        String   @id @default(cuid())
+  imageUrl  String
+  createdAt DateTime @default(now())
+
+  // Relation to User
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+}
+
+model Follows {
+  id          String   @id @default(cuid())
+
+  // follower
+  follower   User   @relation("Following", fields: [followerId], references: [id])
+  followerId String
+
+  // following
+  following   User   @relation("FollowedBy", fields: [followingId], references: [id])
+  followingId String
+
+  @@unique([followerId, followingId])
+}

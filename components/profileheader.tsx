@@ -1,76 +1,75 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { MoreHorizontal, Link as LinkIcon } from 'lucide-react';
-import { UserProfile } from '../src/app/types';
+import { useEffect, useState } from "react";
 
-/**
- * A reusable component to display a number with a label.
- */
-interface ProfileStatProps {
-  label: string;
-  value: string | number;
-}
-
-const ProfileStat: React.FC<ProfileStatProps> = ({ label, value }) => (
-  <div className="flex flex-col items-center">
-    <span className="font-semibold text-lg dark:text-gray-100">{value}</span>
-    <span className="text-gray-600 dark:text-gray-400 text-sm">{label}</span>
-  </div>
-);
-
-/**
- * The main profile header component.
- * Displays user info, stats, and a bio.
- */
 interface ProfileHeaderProps {
-  user: UserProfile;
+  user?: { 
+    username?: string; 
+    avatar?: string; 
+    bio?: string; 
+    website?: string;
+    posts?: any[];
+    followers?: { id: string; username: string }[];
+    following?: { id: string; username: string }[];
+  };
+  onShowFollowers?: () => void;
+  onShowFollowing?: () => void;
 }
 
-export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user }) => (
-  <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-12 p-6 rounded-xl shadow-md bg-white dark:bg-gray-800 transition-colors duration-200">
-    {/* Avatar */}
-    <div className="flex-shrink-0">
-      <img
-        className="w-28 h-28 md:w-40 md:h-40 rounded-full border-4 border-white dark:border-gray-700 shadow-lg"
-        src={user.avatar}
-        alt={`${user.username}'s avatar`}
-      />
-    </div>
+export default function ProfileHeader({ user, onShowFollowers, onShowFollowing }: ProfileHeaderProps) {
+  const [username, setUsername] = useState<string | null>(user?.username || null);
+  const [avatar, setAvatar] = useState<string | null>(user?.avatar || null);
+  const [bio, setBio] = useState<string | null>(user?.bio || null);
+  const [website, setWebsite] = useState<string | null>(user?.website || null);
 
-    {/* Profile Details */}
-    <div className="flex flex-col items-center md:items-start text-center md:text-left space-y-4 w-full">
-      {/* Username and Actions */}
-      <div className="flex items-center space-x-4">
-        <h2 className="text-3xl font-light dark:text-gray-100">{user.username}</h2>
-        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-full transition-colors duration-200">
-          stick
+  useEffect(() => {
+    if (!user) {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        const parsedUser = JSON.parse(storedUser);
+        setUsername(parsedUser.username || parsedUser.email);
+        setAvatar(parsedUser.avatar || null);
+        setBio(parsedUser.bio || null);
+        setWebsite(parsedUser.website || null);
+      }
+    } else {
+      setUsername(user.username || null);
+      setAvatar(user.avatar || null);
+      setBio(user.bio || null);
+      setWebsite(user.website || null);
+    }
+  }, [user]);
+
+  return (
+    <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-6">
+      <div className="flex items-center space-x-3">
+        {avatar ? (
+          <img src={avatar} alt="avatar" className="w-16 h-16 rounded-full object-cover" />
+        ) : (
+          <div className="w-16 h-16 rounded-full bg-gray-300 flex items-center justify-center text-2xl font-bold text-black">
+            {username ? username[0].toUpperCase() : "U"}
+          </div>
+        )}
+        <div>
+          <p className="font-semibold text-lg">{username || "Guest"}</p>
+          {bio && <p className="text-sm text-gray-500">{bio}</p>}
+          {website && <a href={website} className="text-xs text-blue-500 hover:underline" target="_blank" rel="noopener noreferrer">{website}</a>}
+        </div>
+      </div>
+      <div className="flex gap-6 mt-4 sm:mt-0 sm:ml-8">
+        <div className="text-center">
+          <span className="font-bold">{user?.posts?.length ?? 0}</span>
+          <div className="text-xs text-gray-400">posts</div>
+        </div>
+        <button className="text-center focus:outline-none" onClick={onShowFollowers}>
+          <span className="font-bold">{user?.followers?.length ?? 0}</span>
+          <div className="text-xs text-gray-400">followers</div>
         </button>
-        <button className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors duration-200">
-          <MoreHorizontal size={24} />
+        <button className="text-center focus:outline-none" onClick={onShowFollowing}>
+          <span className="font-bold">{user?.following?.length ?? 0}</span>
+          <div className="text-xs text-gray-400">following</div>
         </button>
       </div>
-
-      {/* Stats */}
-      <div className="flex space-x-8">
-        <ProfileStat label="Posts" value={user.postsCount.toLocaleString()} />
-        <ProfileStat label="Followers" value={user.followersCount.toLocaleString()} />
-        <ProfileStat label="Following" value={user.followingCount.toLocaleString()} />
-      </div>
-
-      {/* Bio and Website */}
-      <div className="flex flex-col items-center md:items-start text-sm">
-        <p className="font-semibold dark:text-gray-100">{user.bio}</p>
-        <a 
-          href={`https://${user.website}`} 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-500 mt-1 flex items-center space-x-1 transition-colors duration-200"
-        >
-          <LinkIcon size={16} />
-          <span>{user.website}</span>
-        </a>
-      </div>
     </div>
-  </div>
-);
+  );
+}
